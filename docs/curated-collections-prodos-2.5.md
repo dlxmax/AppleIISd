@@ -106,6 +106,40 @@ UTILS/
   games may not be. Signature: a game that misbehaves on p3–p8 but
   works on p1–p2.
 
+### French Touch demos (individual floppy releases)
+
+- **Source:** <http://fr3nch.t0uch.free.fr/> ("FRENCH TOUCH VAULT").
+  ~28 releases from 2014–2024: demos, intros, musidisks,
+  animadisks, slideshows. Group members: Grouik (founder) and
+  Fenarinarsa. Each release is its own per-disk page on the site.
+- **Format:** Floppy disk images — typically 140KB DOS 3.3 / ProDOS
+  5.25" or 800KB Unidisk 3.5", **not** 32MB ProDOS volumes. Most
+  recent release **DIX** (Nov 2024) is an Anthology that packs
+  many of their prods onto a single 800K floppy.
+- **Loader:** Mixed and per-release. Many demos boot direct from
+  floppy and don't touch mass storage at all. FT also publishes a
+  custom **"FAST LOADER"** (Mar 2021) which is exactly the kind of
+  direct SmartPort/Disk II poke that risks DSSS00XY breakage if
+  invoked from an AppleIISd partition 3–8.
+- **Recommended slot:** N/A for the canonical experience.
+  - **Best path: Floppy Emu** or in-emulator (AppleWin / Virtual II
+    / MAME). Boot each release as its own floppy image.
+  - **AppleIISd path:** copy demo contents into a 32MB ProDOS
+    partition and launch as ProDOS programs from a menu. Many
+    demos will run; some that hardcode floppy I/O won't. If using
+    p3–p8 and a demo's loader pokes SmartPort directly, it'll hit
+    the same DSSS00XY bug — fall back to p1/p2.
+- **Mods needed:**
+  - Per-release: check whether the disk uses ProDOS or DOS 3.3.
+    DOS 3.3 disks need conversion to ProDOS file format before
+    they can live inside a ProDOS partition.
+  - Hardware: many FT demos require Mockingboard (sound) and
+    target 50Hz PAL timing; some have NTSC variants in the same
+    release. Check each release page.
+- **Notable releases:** DIX (Anthology, 2024); Plasmagoria;
+  Crazy Cycles I/II; MAD EFFECT #1–3; Pure Noise (Mockingboard
+  music). Full index at the site.
+
 ### MECC Collection (8-bit educational)
 
 - **Source:**
@@ -184,6 +218,7 @@ would propagate to `4sports` (Instant Replay) on its next refresh.
 - wizard-replay source (Wizardry Replay) — <https://github.com/a2-4am/wizard-replay>
 - apple-2.com collections index — <https://www.apple-2.com/>
 - MECC Collection — <https://www.whatisthe2gs.apple2.org.za/mecc-collection-run-classic-eduware-titles-from-a-hard-drive-as-well-as-gs-os/index.html>
+- French Touch Vault (demoscene releases) — <http://fr3nch.t0uch.free.fr/>
 - 4cade changelog — <https://github.com/a2-4am/4cade/blob/main/res/history.md>
 - Applefritter "ProDOS 8 drives per slot" thread —
   <https://www.applefritter.com/content/prodos-8-drives-slot>
