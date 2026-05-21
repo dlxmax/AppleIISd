@@ -25,6 +25,25 @@ code handles them correctly. The bug only fires for partitions 3–8
 
 Wizard Replay has no constraint — install it anywhere.
 
+## Other curated 32MB images (apple-2.com)
+
+The 32MB collections at <https://www.apple-2.com/> (BurgerDisk,
+XDrive, XDrive2C, CFFA-3000, "Games" by San Inc/qkumba, Hyper,
+SPSD, a2-dev) all share the same shape: stock `PRODOS` + a small
+`*.SYSTEM` launcher (`BURGER.SYSTEM`, `GAMES.SYSTEM`,
+`XDR2C.SYSTEM`, `CFFA3.SYSTEM`, etc., mostly by Daniel Henderson
+and Peter Ferrie) + `BASIC.SYSTEM` + GAMES/UTILS directories of
+standalone ProDOS programs. The launcher goes through ProDOS MLI
+to enumerate and launch — same shape as Wizard Replay. **No
+ProRWTS-style fast loader in the launcher path → works on any
+AppleIISd partition under ProDOS 2.5.**
+
+Caveat: individual games *inside* these collections that ship
+their own SmartPort fast loader (a Total-Replay-style direct poke)
+would still hit the DSSS00XY bug. The launcher is fine; specific
+games may not be. If you find one that misbehaves on partitions
+3–8 but works on 1–2, that's the signature.
+
 ## Why Wizard Replay is fine and 4cade isn't
 
 4cade has its own fast loader (ProRWTS2) that pokes the SmartPort
