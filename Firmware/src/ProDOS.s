@@ -45,8 +45,11 @@
 ;
 ;*******************************
 
-; Decode partition (0-7) from DSNUMBER. ProDOS 2.5 encodes unit
-; number as D S S S 0 0 X Y where drive 1-8 = X*4 + Y*2 + D + 1.
+; Decode partition (0-7) from DSNUMBER. ProDOS 2.5 unitnum layout:
+;   bit  7 6 5 4 3 2 1 0
+;        D S S S 0 0 X Y
+; D = drive bit 0, Y = drive bit 1, X = drive bit 2,
+; so drive 1-8 = X*4 + Y*2 + D + 1.
 ; ProDOS 2.4 with phantom-slot mapping reaches drives 3-4 via
 ; the previous slot (X=Y=0, D selects 3 vs 4); preserve that path.
 PRODOS:     LDA   SLOT16
