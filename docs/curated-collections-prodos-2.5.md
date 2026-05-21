@@ -34,8 +34,8 @@ break, and even then only on partitions 3–8 where X or Y is set.
 | **3** | Wizard Replay / Wizardry Replay 2.0     | Pure ProDOS MLI — works on any partition. Parked here to keep p1/p2 for 4cade. |
 | **4** | apple-2.com collection of choice (e.g. BurgerDisk, SmartPort, etc.) | MLI launcher — works on any partition. |
 | **5** | MECC Collection (or other educational)  | Standard ProDOS — works on any partition. Convert `.2mg` → `.po` first. |
-| **6** | Blank / development scratch             | Format with `cp2 create-disk-image` or in-Apple FILER. |
-| **7** | Blank / second dev volume               | Same. |
+| **6** | a2-dev (Merlin / Copy II Plus / Dazzle Draw / sample source) | apple-2.com's developer image — bundles Merlin, paint tools, ProDOS 2.4.2/2.4.3 system disks. Swap in PRODOS 2.5 at root. |
+| **7** | Blank / scratch volume                  | Format with `cp2 create-disk-image` or in-Apple FILER. |
 
 This is a suggestion, not a constraint. The only **hard** rule:
 **4cade-based collections must go on partition 1 or 2.** Everything
@@ -105,6 +105,46 @@ UTILS/
   DSSS00XY bug on partitions 3–8. The launcher is fine; specific
   games may not be. Signature: a game that misbehaves on p3–p8 but
   works on p1–p2.
+
+### Apple II Development (a2-dev, apple-2.com)
+
+Same shape as the rest of the apple-2.com family but called out
+separately because the contents are dev-oriented and it ships
+older ProDOS that a 2.5 user will want to replace.
+
+- **Source:** <https://www.apple-2.com/> → a2-dev 32MB image.
+  Updated 28-Oct-2025. File list:
+  <https://www.apple-2.com/vintage-dl/text/a2-dev-list.txt>.
+- **Format:** 32MB `.po`. dd straight onto a partition.
+- **Loader:** `A2DEV.SYSTEM` (Henderson/Ferrie launcher) + stock
+  `PRODOS` + `BASIC.SYSTEM` + `NSCLK.SYSTEM` (No-Slot Clock
+  driver, deletable). Standard MLI throughout.
+- **Recommended slot:** Any (suggested p6 as your dev/scratch
+  partition, alongside or instead of a blank).
+- **Contents of note:**
+  - `MERLIN.ASM/` — Merlin Assembler v2.58 (the canonical
+    on-Apple cross-assembler).
+  - `GFX.EDITORS/DAZZLE.DRAW/` — Dazzle Draw double-hi-res paint.
+  - `GFX.EDITORS/PAINT816/` — 8/16 Paint (Z816 SHR-capable).
+  - `UTILITIES/V84/` and `V91/` — Copy II Plus v8.4 and v9.1,
+    plus BitCopy.
+  - `UTILITIES/PRODOS242/` and `PRODOS243/` — full ProDOS 2.4.2
+    and 2.4.3 system disks (Bitsy Boot, BlockWarden, CatDoctor,
+    FastDsk, MAKE.SMALL.P8, MR.FIXIT.Y2K, UNSHRINK, ADTPRO 2.0.2).
+  - `SOURCE.CODE/` — small Merlin source samples
+    (`DISPLAY.DHR.S`, `GBASCALC.S`, `ULTIMA.SND.S`, `ZEEP.SND.S`).
+  - `IMAGES.DHR/ABST00–ABST23` + `ABST23.SYSTEM` — 24 sample DHR
+    abstract images with a viewer.
+- **Mods needed:**
+  - **ProDOS swap if you want 2.5 throughout.** The image ships
+    PRODOS dated 30-DEC-23 (a 2.4.x build) at root and bundles
+    2.4.2 / 2.4.3 system disks. To boot this partition under
+    ProDOS 2.5, replace the root `PRODOS` file with the 2.5
+    build (via `cp2`, Copy II Plus, or in-Apple). The 2.4.x
+    bundles inside `UTILITIES/` can stay — they're convenient for
+    testing software against older ProDOS.
+  - None for the dev tools themselves — they're stock and
+    MLI-clean.
 
 ### French Touch demos (individual floppy releases)
 
