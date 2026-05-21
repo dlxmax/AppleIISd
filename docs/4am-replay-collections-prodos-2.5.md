@@ -28,11 +28,11 @@ Wizard Replay has no constraint — install it anywhere.
 ## Other curated 32MB images (apple-2.com)
 
 The 32MB collections at <https://www.apple-2.com/> (BurgerDisk,
-XDrive, XDrive2C, CFFA-3000, "Games" by San Inc/qkumba, Hyper,
-SPSD, a2-dev) all share the same shape: stock `PRODOS` + a small
-`*.SYSTEM` launcher (`BURGER.SYSTEM`, `GAMES.SYSTEM`,
-`XDR2C.SYSTEM`, `CFFA3.SYSTEM`, etc., mostly by Daniel Henderson
-and Peter Ferrie) + `BASIC.SYSTEM` + GAMES/UTILS directories of
+XDrive, XDrive2C, CFFA-3000, SmartPort, "Games" by San Inc/qkumba,
+Hyper, SPSD, a2-dev) all share the same shape: stock `PRODOS` + a
+small `*.SYSTEM` launcher (`BURGER.SYSTEM`, `GAMES.SYSTEM`,
+`XDR2C.SYSTEM`, `CFFA3.SYSTEM`, `SMART.SYSTEM`, `SPSD.SYSTEM`,
+etc., mostly by Daniel Henderson and Peter Ferrie) + `BASIC.SYSTEM` + GAMES/UTILS directories of
 standalone ProDOS programs. The launcher goes through ProDOS MLI
 to enumerate and launch — same shape as Wizard Replay. **No
 ProRWTS-style fast loader in the launcher path → works on any
