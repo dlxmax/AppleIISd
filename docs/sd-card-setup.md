@@ -39,7 +39,31 @@ Any small SD works:
 Smaller is fine; the firmware detects card type via OCR and
 adjusts addressing (`SDHC` flag in `$C0n3`).
 
-## Recipe A — boot from a ready-made image (fast path, Linux)
+## Recipe A — CiderPress Volume Copier (canonical, Windows)
+
+The original AppleIISd tutorial
+([Blue Meanie, 2017](https://bluemeanie-retro.blogspot.com/2017/12/how-to-prepare-sd-cards-for-appleiisd.html))
+uses the Windows **CiderPress** GUI:
+
+1. Run **CiderPress** as administrator (raw disk access needs it).
+2. *File → Open Volume* → pick the SD card. Triple-check the
+   device — picking the wrong one overwrites your system drive.
+3. Use the **Volume Copier** to write a `.po` image into each
+   partition slot. *Load from file* copies a ProDOS image into the
+   selected slot.
+4. For a bootable card, partition 0 must contain `PRODOS` and a
+   `*.SYSTEM` file at the root.
+5. Properly eject the card (taskbar icon) before pulling it.
+
+Notes:
+- A fresh SD card may show up as an **MS-DOS volume** the first
+  time you open it. That's normal — CiderPress will overwrite it.
+- CiderPress (Windows) has a **256 MB minimum** for this workflow.
+  Smaller cards (e.g. 128 MB) won't hold 4+ ProDOS volumes.
+
+On Linux/Mac, use Recipe B or C below — same end result, just dd.
+
+## Recipe B — boot from a ready-made image (fast path, Linux/Mac)
 
 Most curated 32MB ProDOS images (e.g. apple-2.com's BurgerDisk,
 SmartPort, XDrive2C, etc., or Total Replay, Wizard Replay) are
@@ -56,7 +80,7 @@ ProDOS volume ready to drop on disk.
    ```
 3. Pop the card into the AppleIISd. Boot. Partition 0 is live.
 
-## Recipe B — fill more partitions
+## Recipe C — fill more partitions
 
 Same `dd`, just `seek=N` where N is the partition number:
 
@@ -75,7 +99,7 @@ Replay / Instant Replay use a ProRWTS fast loader that breaks
 on partitions 3–8 under ProDOS 2.5. Put those on partition 1
 or 2.
 
-## Recipe C — create a blank 32MB volume
+## Recipe D — create a blank 32MB volume
 
 Use **CiderPress II** (`cp2`, cross-platform .NET 8 CLI from
 <https://github.com/fadden/CiderPress2>):
@@ -91,7 +115,7 @@ card at whichever partition offset you want.
 Set the volume name when you create it, or rename later in any
 ProDOS file manager.
 
-## Recipe D — format from inside the Apple II
+## Recipe E — format from inside the Apple II
 
 If you have ProDOS booting from somewhere else (a floppy, another
 SD card, a different mass-storage card), boot it, then format the
