@@ -1,7 +1,7 @@
 ;*******************************
 ;
 ; Apple][Sd Firmware
-; Version 1.2.3
+; Version 1.3.0
 ; ProDOS functions
 ;
 ; (c) Florian Reitz, 2017 - 2021
@@ -45,7 +45,29 @@
 ;
 ;*******************************
 
-PRODOS:     LDA   DCMD        ; get command
+; Decode partition (0-7) from DSNUMBER. ProDOS 2.5 encodes unit
+; number as D S S S 0 0 X Y where drive 1-8 = X*4 + Y*2 + D + 1.
+; ProDOS 2.4 with phantom-slot mapping reaches drives 3-4 via
+; the previous slot (X=Y=0, D selects 3 vs 4); preserve that path.
+PRODOS:     LDA   SLOT16
+            EOR   DSNUMBER
+            AND   #$70        ; check slot bits
+            BEQ   @MYSLOT
+            LDA   #2          ; phantom slot: legacy drive 3/4
+            BRA   @ADDBITS
+@MYSLOT:    LDA   #0
+@ADDBITS:   STA   SMBASE
+            LDA   DSNUMBER    ; D S S S 0 0 X Y
+            AND   #$03        ; isolate X Y
+            ASL   A           ; X*4 + Y*2
+            CLC
+            ADC   SMBASE
+            STA   SMBASE
+            LDA   DSNUMBER
+            BPL   @DCMD       ; D = 0
+            INC   SMBASE      ; D = 1
+
+@DCMD:      LDA   DCMD        ; get command
             BEQ   @STATUS     ; branch if cmd is 0
             CMP   #1
             BEQ   @READ

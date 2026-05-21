@@ -1,7 +1,7 @@
 ;*******************************
 ;
 ; Apple][Sd Firmware
-; Version 1.2.3
+; Version 1.3.0
 ; Main source
 ;
 ; (c) Florian Reitz, 2017 - 2021
@@ -105,15 +105,14 @@
 ;*******************************
 
 ; load disk blocks 0 and 1 to $800 and $A00
-@BOOT:      LDA   #$08        ; load to $800
+@BOOT:      STZ   SMBASE      ; boot from partition 0
+            LDA   #$08        ; load to $800
             STA   BUFFER+1    ; buffer hi
             STZ   BUFFER      ; buffer lo
             STZ   BLOCKNUM+1  ; block hi
             STZ   BLOCKNUM    ; block lo
-            LDA   SLOT16
-            STA   DSNUMBER    ; set to current slot
             JSR   READ
-            BCS   @NEXTSLOT   ; load not successful 
+            BCS   @NEXTSLOT   ; load not successful
 
             LDA   #$0A
             STA   BUFFER+1    ; buffer hi
@@ -122,7 +121,7 @@
             LDA   #$01
             STA   BLOCKNUM    ; block lo
             JSR   READ
-            BCS   @NEXTSLOT   ; load not successful 
+            BCS   @NEXTSLOT   ; load not successful
             JMP   $801        ; goto bootloader
 
 
@@ -356,7 +355,7 @@ INIT:       STZ   CTRL,X      ; reset SPI controller
 KNOWNRTS:   RTS
 
 
-TEXT:       .asciiz " Apple][Sd v1.2.2 (c)2021 Florian Reitz"
+TEXT:       .asciiz " Apple][Sd v1.3.0 (c)2026 Florian Reitz"
             .assert(*-TEXT)=40, error, "TEXT must be 40 bytes long"
 
 

@@ -1,7 +1,7 @@
 ;*******************************
 ;
 ; Apple][Sd Firmware
-; Version 1.2.3
+; Version 1.3.0
 ; Helper functions
 ;
 ; (c) Florian Reitz, 2017 - 2021
@@ -104,7 +104,7 @@ GETR3:      JSR   GETR1       ; get R1 first
 ;*******************************
 ;
 ; Calculate block address
-; Unit number is in $43 DSSS0000
+; Partition (0-7) is in SMBASE
 ; Block no is in $46-47
 ; Address is in R30-R33
 ;
@@ -118,26 +118,14 @@ GETBLOCK:   PHX               ; save X
             STA   R33,X       ; in R30-R33
             LDA   BLOCKNUM+1
             STA   R32,X
-            STZ   R31,X
+            LDA   SMBASE      ; partition 0-7
+            STA   R31,X
             STZ   R30,X
 
-            TYA               ; get SLOT16
-            EOR   DSNUMBER
-            AND   #$70        ; check only slot bits
-            BEQ   @DRIVE      ; it is our slot
-            LDA   #2          ; it is a phantom slot
-            STA   R31,X
-
-@DRIVE:     LDA   DSNUMBER    ; drive number
-            BPL   @SDHC       ; D1
-            LDA   R31,X       ; D2
-            INC   A
-            STA   R31,X
-
-@SDHC:      LDA   #SDHC
+            LDA   #SDHC
             AND   SS,Y        ; if card is SDHC,
             BNE   @END        ; use block addressing
-            
+
             LDY   #9          ; ASL can't be used with Y
 @LOOP:      ASL   R33,X       ; mul block num
             ROL   R32,X       ; by 512 to get
@@ -145,8 +133,8 @@ GETBLOCK:   PHX               ; save X
             ROL   R30,X
             DEY
             BNE   @LOOP
-  
- @END:      PLY               ; restore Y
+
+@END:       PLY               ; restore Y
             PLX               ; restore X
             RTS
 

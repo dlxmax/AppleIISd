@@ -9,7 +9,7 @@ The assembler sources are written for CC65. The [schematics](Binary/AppleIISd.pd
 
 ## Features
 * works with ProDOS and GS/OS
-* up to 128MB storage space (4x 65535 blocks)
+* up to 256MB storage space (8x 65535 blocks) with ProDOS 2.5
 * ProDOS and Smartport driver in ROM
 * Firmware update from ProDOS
 * Auto boot
@@ -43,7 +43,9 @@ The following files in [Binary/](Binary) have been provided to eliminate the nee
 ## Smartport drive remapping
 The AppleIISd features Smartport drivers in ROM to provide more than two drives in both GS/OS and ProDOS.
 
-As ProDOS supports only two drives per slot, additional drives on a Smartport device are mapped to 'phantom slots'. Version prior to version 2 supported only the remapping of drives when the card was in slot 5. Starting with version 2, the remapping seems to work on all slots. The following list shows the assignments as slot/drive, when no other devices are attached:
+Starting with firmware v1.3.0 the card reports **8 partitions** over Smartport. Under **ProDOS 2.5** all 8 drives are addressed natively on the card's own slot using the new ProDOS 2.5 unit-number encoding (`D S S S 0 0 X Y`, where drive 1–8 = X·4 + Y·2 + D + 1). No phantom-slot mapping is required.
+
+Under **ProDOS 2.4 and earlier**, only 4 drives are reachable because the legacy unit-number byte only encodes 2 drives per slot. The firmware still honors the previous phantom-slot mapping for drives 3 and 4 so existing setups keep working:
 
 * Slot 7: 7/1, 7/2, 4/1, 4/2
 * Slot 6: 6/1, 6/2, 4/1, 4/1

@@ -1,7 +1,7 @@
 ;*******************************
 ;
 ; Apple][Sd Firmware
-; Version 1.2.3
+; Version 1.3.0
 ; Smartport functions
 ;
 ; (c) Florian Reitz, 2017 - 2021
@@ -125,7 +125,7 @@ SMSTATUS:   JSR   GETCSLIST
             RTS
 
 ; TODO support partitions based on card size
-@STATUS00:  LDA   #4            ; support 4 partitions
+@STATUS00:  LDA   #8            ; support 8 partitions (ProDOS 2.5)
             STA   (SMCMDLIST)
 
             LDY   #7
@@ -261,40 +261,19 @@ SMWRITEBLOCK:
             JMP   WRITE     ; call ProDOS write
 
 
-; Translates the Smartport unit number to a ProDOS device
+; Translates the Smartport unit number to a partition base
 ; and prepares the block number
 ;
-; Unit 0: entire chain, not supported
-; Unit 1: this slot, drive 0
-; Unit 2: this slot, drive 1
-; Unit 3: phantom slot, drive 0
-; Unit 4: phantom slot, drive 1
+; Unit 0:    entire chain, not supported
+; Unit 1-8:  partition 0-7 on this slot
 ;
 TRANSLATE:  LDA   DRVNUM,Y
-            BEQ   @BADUNIT       ; not supportd for unit 0
-            CMP   #1
-            BEQ   @UNIT1
-            CMP   #2
-            BEQ   @UNIT2
-            CMP   #3
-            BEQ   @UNIT3
-            CMP   #4
-            BEQ   @UNIT4
-            BRA   @BADUNIT      ; only 4 partitions are supported
+            BEQ   @BADUNIT      ; not supported for unit 0
+            CMP   #9
+            BCS   @BADUNIT      ; only 8 partitions are supported
 
-@UNIT1:     LDA   SLOT16        ; this slot
-            BRA   @STORE
-@UNIT2:     LDA   SLOT16
-            ORA   #$80          ; drive 1
-            BRA   @STORE
-@UNIT3:     LDA   SLOT16
-            DEC   A             ; phantom slot
-            BRA   @STORE
-@UNIT4:     LDA   SLOT16
-            DEC   A             ; phantom slot
-            ORA   #$80          ; drive 1
-
-@STORE:     STA   DSNUMBER      ; store in ProDOS variable
+            DEC   A             ; partition = unit - 1
+            STA   SMBASE
 
             LDY   #2            ; get buffer pointer
             LDA   (SMPARAMLIST),Y

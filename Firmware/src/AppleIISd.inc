@@ -1,7 +1,7 @@
 ;*******************************
 ;
 ; Apple][Sd Firmware
-; Version 1.2.3
+; Version 1.3.0
 ; Defines
 ;
 ; (c) Florian Reitz, 2017 - 2021
@@ -30,8 +30,9 @@ BLOCKNUM    :=    $46         ; block number, two bytes
 SMPARAMLIST :=    $48         ; parameter list, two bytes
 SMCMDLIST   :=    $4A         ; command list, two bytes
 SMCSCODE    :=    $4C
+SMBASE      :=    $4D         ; partition base (0-7) for current request
 SMZPAREA    =     SMPARAMLIST
-SMZPSIZE    =     SMCSCODE-SMZPAREA+1
+SMZPSIZE    =     SMBASE-SMZPAREA+1
 SMCMD       =     DCMD
 
 
@@ -59,7 +60,7 @@ WP          =     $20
 CD          =     $40
 CARD_INIT   =     $80
 
-SMDRIVERVER =     $120B       ; Version 1.2 Beta
+SMDRIVERVER =     $1300       ; Version 1.3.0
 
 ; Error codes
 NO_ERR          =     $00
